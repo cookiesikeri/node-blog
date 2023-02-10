@@ -12,7 +12,7 @@ module.exports = function({ app, dbConn, upload }) {
                 const findAccountByEmail = "SELECT * FROM user_account WHERE user_email = ?";
                 dbConn.query(findAccountByEmail, [email], function(error, account) {
                     if (account && account.length !== 0) {
-                        res.status(200).jsonp({ message: 'The email existed in the system' });
+                        res.status(413).jsonp({ message: 'The email existed in the system' });
                     } else {
                         const users = [
                             [id, email, password, fullname, avatar]
@@ -22,23 +22,25 @@ module.exports = function({ app, dbConn, upload }) {
                             if (insertedUser) {
                                 res.status(200).jsonp({ avatar, insertId: insertedUser.insertId });
                             } else {
-                                res.status(200).jsonp({ message: 'Cannot create your account, please try again' });
+                                res.status(500).jsonp({ message: 'Cannot create your account, please try again' });
                             }
                         });
                     }
                 });
             } else {
-                return res.status(200).jsonp({ message: "Please input required fields" });
+                return res.status(412).jsonp({ message: "Please input required fields" });
             }
         }
     });
+
+
 
     app.post('/users/posts', (req, res) => {
         const { numberOfPosts, id } = req.body;
         const updateNumberOfPostsSql = "UPDATE user_account SET user_number_of_posts = ? WHERE id = ?";
         dbConn.query(updateNumberOfPostsSql, [numberOfPosts, id], function(err, updatedUser) {
             if (err) {
-                res.status(200).jsonp({ message: "The system error. Please try again" });
+                res.status(500).jsonp({ message: "The system error. Please try again" });
             } else if (updatedUser) {
                 res.status(200).jsonp({ id });
             }
@@ -48,14 +50,14 @@ module.exports = function({ app, dbConn, upload }) {
     app.get('/users/:id', (req, res) => {
         const userId = req.params.id;
         if (!userId) {
-            res.status(200).jsonp({ message: 'Cannot load user information, please try again' });
+            res.status(404).jsonp({ message: 'Cannot load user information, please try again' });
         }
         const getUserSql = "SELECT * FROM user_account WHERE id = ?";
         dbConn.query(getUserSql, [userId], function(error, response) {
             if (response && response.length) {
                 res.status(200).jsonp(response);
             } else {
-                res.status(200).jsonp({ message: 'Cannot load user information, please try again' });
+                res.status(500).jsonp({ message: 'Cannot load user information, please try again' });
             }
         });
     });
