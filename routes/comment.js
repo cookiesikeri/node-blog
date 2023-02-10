@@ -1,11 +1,11 @@
 module.exports = function({ app, dbConn }) {
-    app.post('/reactions/get', (req, res) => {
-        const { post_id, user_id } = req.body;
-        if (!post_id || !user_id) {
+    app.get('/comments/get', (req, res) => {
+        const { post_id } = req.body;
+        if (!post_id) {
             res.status(404).jsonp({ message: 'Not found' });
         }
-        const getReactionSql = "SELECT * FROM post_reaction WHERE post_id = ? AND user_id = ?";
-        dbConn.query(getReactionSql, [post_id, user_id], function(error, response) {
+        const getReactionSql = "SELECT * FROM comments WHERE post_id = ?";
+        dbConn.query(getReactionSql, [post_id], function(error, response) {
             if (response && response.length) {
                 res.status(200).jsonp({...response[0] });
             } else {
