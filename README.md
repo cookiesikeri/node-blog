@@ -1,4 +1,7 @@
-# node-blog
-# node-blog-test-1
-# node-blog-test-1
-# node-blog-test-1
+JUST A SIMPLE NODEBLOG
+
+after clone
+import db
+run npm install
+run nodemon index.js
+run api collection using postman

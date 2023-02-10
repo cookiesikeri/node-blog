@@ -39,17 +39,17 @@ module.exports = function({ app, dbConn, upload }) {
         });
     });
 
-    app.get('/posts/:id', (req, res) => {
-        const id = req.params.id;
-        const getPostSql = "SELECT post.id, post_content, post_category, post_created_date, post_created_by, post_number_of_reactions, user_account.user_avatar, user_account.user_full_name, user_account.user_number_of_followers FROM post INNER JOIN user_account ON post.post_created_by = user_account.id WHERE post.id = ?";
-        if (!id) {
-            res.status(500).jsonp({ message: 'Cannot load the post detail, please try again' });
+    app.get('/post/:id', (req, res) => {
+        const PostID = req.params.id;
+        if (!PostID) {
+            res.status(404).jsonp({ message: 'Cannot load user information, please try again' });
         }
-        dbConn.query(getPostSql, [id], function(error, response) {
+        const getUserSql = "SELECT * FROM post WHERE id = ?";
+        dbConn.query(getUserSql, [PostID], function(error, response) {
             if (response && response.length) {
                 res.status(200).jsonp(response);
             } else {
-                res.status(404).jsonp({ message: 'Not found' });
+                res.status(500).jsonp({ message: 'Cannot load user information, please try again' });
             }
         });
     });
@@ -69,7 +69,7 @@ module.exports = function({ app, dbConn, upload }) {
     app.post('/posts/categories', (req, res) => {
         const { userId, postCategory } = req.body;
         if (!userId || !postCategory) {
-            res.status(500).jsonp({ message: 'Cannot load your posts, please try again' });
+            res.status(404).jsonp({ message: 'Cannot load your posts, please try again' });
         }
         const getPostsSql = "SELECT * FROM post WHERE post_created_by = ? AND post_category = ? ORDER BY post_created_date DESC";
         dbConn.query(getPostsSql, [userId, postCategory], function(error, posts) {

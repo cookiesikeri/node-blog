@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Feb 10, 2023 at 09:33 AM
+-- Generation Time: Feb 10, 2023 at 11:05 AM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 7.4.29
 
@@ -24,6 +24,26 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `comments`
+--
+
+CREATE TABLE `comments` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `comment` longtext NOT NULL,
+  `post_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `comments`
+--
+
+INSERT INTO `comments` (`id`, `user_id`, `comment`, `post_id`) VALUES
+(5, 1, 'ok all is good', 1);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `post`
 --
 
@@ -36,6 +56,13 @@ CREATE TABLE `post` (
   `post_number_of_reactions` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `post`
+--
+
+INSERT INTO `post` (`id`, `post_content`, `post_category`, `post_created_date`, `post_created_by`, `post_number_of_reactions`) VALUES
+(1, '/post_image-1676018186488.jpg', 1, '2023-02-10 08:36:26', 'eben@test.com', NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -47,6 +74,13 @@ CREATE TABLE `post_reaction` (
   `post_id` bigint(20) NOT NULL,
   `user_id` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `post_reaction`
+--
+
+INSERT INTO `post_reaction` (`id`, `post_id`, `user_id`) VALUES
+(1, 1, '1');
 
 -- --------------------------------------------------------
 
@@ -100,6 +134,12 @@ CREATE TABLE `user_notification` (
 --
 
 --
+-- Indexes for table `comments`
+--
+ALTER TABLE `comments`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `post`
 --
 ALTER TABLE `post`
@@ -134,16 +174,22 @@ ALTER TABLE `user_notification`
 --
 
 --
+-- AUTO_INCREMENT for table `comments`
+--
+ALTER TABLE `comments`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT for table `post`
 --
 ALTER TABLE `post`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `post_reaction`
 --
 ALTER TABLE `post_reaction`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `user_follower`
